@@ -10,9 +10,7 @@ class VaultSelector(tk.Toplevel):
     """Dialog for selecting or creating a vault folder."""
 
     def __init__(self, parent, vaults_base: Path, existing_vaults: list[str]):
-        print("[DEBUG] VaultSelector.__init__ starting...")
         super().__init__(parent)
-        print("[DEBUG] Toplevel window created")
         self.title("Select Vault")
         self.geometry("600x650")
         self.resizable(False, False)
@@ -20,12 +18,9 @@ class VaultSelector(tk.Toplevel):
         self.vaults_base = vaults_base
         self.existing_vaults = existing_vaults
 
-        print("[DEBUG] Building VaultSelector UI...")
         self._build_ui()
-        print("[DEBUG] VaultSelector UI built")
         self.transient(parent)
         self.grab_set()
-        print("[DEBUG] VaultSelector grab_set called")
 
     def _build_ui(self) -> None:
         """Build the vault selection UI."""
@@ -213,12 +208,10 @@ class PasswordManagerApp:
     CLIPBOARD_CLEAR_SECONDS = 30
 
     def __init__(self):
-        print("[DEBUG] PasswordManagerApp.__init__ starting...")
         self.master_key = None
         self.vault_name = None
         self.is_switching = False
         self.root = tk.Tk()
-        print("[DEBUG] Tkinter root created")
         # Initially hide the main window while we ask which vault to open/create.
         self.root.withdraw()
 
@@ -227,7 +220,6 @@ class PasswordManagerApp:
         self.vaults_base.mkdir(parents=True, exist_ok=True)
         print(f"[DEBUG] Vaults base directory: {self.vaults_base}")
 
-        print("[DEBUG] Calling _select_or_create_vault()...")
         selected_db_path, vault_name = self._select_or_create_vault()
         print(f"[DEBUG] Vault selected: {vault_name}, DB path: {selected_db_path}")
         self.vault_name = vault_name
@@ -243,7 +235,6 @@ class PasswordManagerApp:
         self.password_var = tk.StringVar()
         self.password_confirm_var = tk.StringVar()
         self._bind_activity_events()
-        print("[DEBUG] Showing login screen...")
         self._show_login_screen()
 
     def _select_or_create_vault(self) -> tuple[Path, str]:
@@ -253,21 +244,16 @@ class PasswordManagerApp:
         Returns tuple of (vault.db path, vault_name).
         If the user cancels, exit the application.
         """
-        print("[DEBUG] _select_or_create_vault() called")
         # Show the root window so dialogs can appear properly
-        print("[DEBUG] Showing root window...")
         self.root.deiconify()
         self.root.geometry("1x1+0+0")  # Position it off-screen
         self.root.update()
-        print("[DEBUG] Root window shown")
         
         while True:
             existing = [p.name for p in self.vaults_base.iterdir() if p.is_dir() and (p / "vault.db").exists()]
             print(f"[DEBUG] Existing vaults: {existing}")
             
-            print("[DEBUG] Creating VaultSelector dialog...")
             dialog = VaultSelector(self.root, self.vaults_base, existing)
-            print("[DEBUG] Dialog created, waiting for window close...")
             self.root.wait_window(dialog)
             print(f"[DEBUG] Dialog closed, result: {dialog.result}")
             
