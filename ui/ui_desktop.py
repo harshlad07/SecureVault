@@ -281,6 +281,11 @@ class PasswordManagerApp:
         Closes the current database connection, clears the master key,
         and re-opens the vault selection dialog.
         """
+        # Cancel any pending auto-lock timer
+        if self.inactivity_handle is not None:
+            self.root.after_cancel(self.inactivity_handle)
+            self.inactivity_handle = None
+        
         self.db.close()
         self.master_key = None
         self.is_switching = True
@@ -307,6 +312,8 @@ class PasswordManagerApp:
         self._show_login_screen()
 
     def _on_close(self) -> None:
+        if self.inactivity_handle is not None:
+            self.root.after_cancel(self.inactivity_handle)
         self.db.close()
         self.root.destroy()
 
