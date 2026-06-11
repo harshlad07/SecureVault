@@ -339,6 +339,7 @@ class PasswordManagerApp:
 
         # Show the root window for the login screen
         self.root.deiconify()
+        self.root.geometry("760x520")
 
         # Main container with improved styling
         main_frame = ttk.Frame(self.root)
@@ -431,6 +432,8 @@ class PasswordManagerApp:
             return
         self.current_screen = "vault"
         self._clear_screen()
+        self.root.deiconify()
+        self.root.geometry("760x520")
         self._reset_auto_lock()
 
         header_frame = ttk.Frame(self.root, padding=12)
