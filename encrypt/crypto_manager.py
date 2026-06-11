@@ -9,9 +9,9 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.exceptions import InvalidTag
 
 PBKDF2_ITERATIONS = 200_000
-MAGIC_NUMBER = 888
+MAGIC_NUMBER = 12
 
-def generate_salt(length: int = 32) -> bytes:
+def generate_salt(length: int = 16) -> bytes:
     return os.urandom(length)
 
 
