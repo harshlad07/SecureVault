@@ -1,6 +1,6 @@
 import argparse
-from ui.ui_desktop import PasswordManagerApp
-from ui.ui_web import start_web_server
+from UI.ui_desktop import PasswordManagerApp
+from UI.ui_web import start_web_server
 
 
 def main() -> None:

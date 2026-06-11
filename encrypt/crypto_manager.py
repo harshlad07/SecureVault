@@ -9,9 +9,9 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.exceptions import InvalidTag
 
 PBKDF2_ITERATIONS = 200_000
+MAGIC_NUMBER = 888
 
-
-def generate_salt(length: int = 16) -> bytes:
+def generate_salt(length: int = 32) -> bytes:
     return os.urandom(length)
 
 
@@ -41,7 +41,7 @@ def verify_master_password(password: str, salt: bytes, expected_hash: bytes) -> 
 
 def encrypt_data(plaintext: str, key: bytes) -> tuple[bytes, bytes]:
     aesgcm = AESGCM(key)
-    nonce = os.urandom(12)
+    nonce = os.urandom(MAGIC_NUMBER)
     ciphertext = aesgcm.encrypt(nonce, plaintext.encode("utf-8"), associated_data=None)
     return nonce, ciphertext
 

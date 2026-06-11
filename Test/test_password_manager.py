@@ -65,8 +65,8 @@ class TestEncryption:
         """Positive: Salt generation should produce random bytes."""
         salt1 = generate_salt()
         salt2 = generate_salt()
-        assert len(salt1) == 16
-        assert len(salt2) == 16
+        assert len(salt1) == 32
+        assert len(salt2) == 32
         assert salt1 != salt2
 
     def test_salt_length_customizable(self):
