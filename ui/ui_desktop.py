@@ -211,6 +211,7 @@ class PasswordManagerApp:
         self.master_key = None
         self.vault_name = None
         self.is_switching = False
+        self.current_screen = None  # Track which screen is currently shown
         self.root = tk.Tk()
         # Initially hide the main window while we ask which vault to open/create.
         self.root.withdraw()
@@ -318,10 +319,19 @@ class PasswordManagerApp:
         self.root.destroy()
 
     def _clear_screen(self) -> None:
+        # Remove trace callbacks from StringVar to prevent triggering during transition
+        try:
+            # Get all trace IDs and remove them
+            for trace_id in self.search_var.trace_info():
+                self.search_var.trace_remove(trace_id[0], trace_id[1])
+        except Exception:
+            pass  # Ignore if no traces exist
+        
         for widget in self.root.winfo_children():
             widget.destroy()
 
     def _show_login_screen(self) -> None:
+        self.current_screen = "login"
         self._clear_screen()
         self.search_var.set("")
         self.password_var.set("")
@@ -406,17 +416,20 @@ class PasswordManagerApp:
 
     def _ensure_unlocked(self) -> bool:
         if self.master_key is None:
-            messagebox.showerror(
-                "Vault Locked",
-                "The vault is locked or your session has expired. Please unlock with your master password.",
-            )
-            self._show_login_screen()
+            # Only show error and redirect if we're not already on the login screen
+            if self.current_screen != "login":
+                messagebox.showerror(
+                    "Vault Locked",
+                    "The vault is locked or your session has expired. Please unlock with your master password.",
+                )
+                self._show_login_screen()
             return False
         return True
 
     def _show_vault_screen(self) -> None:
         if not self._ensure_unlocked():
             return
+        self.current_screen = "vault"
         self._clear_screen()
         self._reset_auto_lock()
 
@@ -438,6 +451,7 @@ class PasswordManagerApp:
         ttk.Label(search_frame, text="Search:").pack(side="left")
         search_entry = ttk.Entry(search_frame, textvariable=self.search_var, width=36)
         search_entry.pack(side="left", padx=6)
+        # Re-add the trace callback after UI is built
         self.search_var.trace_add("write", lambda *_: self._refresh_credentials())
 
         self.tree = ttk.Treeview(self.root, columns=("website", "username", "updated"), show="headings", height=14)
