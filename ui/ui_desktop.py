@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from pathlib import Path
-from storage.db_manager import DatabaseManager
-from utils.password_generator import generate_password
-from utils.clipboard_manager import ClipboardManager
+from Storage.db_manager import DatabaseManager
+from Utils.password_generator import generate_password
+from Utils.clipboard_manager import ClipboardManager
 
 
 class VaultSelector(tk.Toplevel):

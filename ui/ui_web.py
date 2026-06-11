@@ -3,7 +3,7 @@
 import os
 import socket
 from flask import Flask, request, redirect, url_for, render_template_string, flash
-from storage.db_manager import DatabaseManager
+from Storage.db_manager import DatabaseManager
 
 WEB_STATE = {"key": None}
 
