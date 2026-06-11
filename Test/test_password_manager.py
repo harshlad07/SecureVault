@@ -11,8 +11,8 @@ from unittest.mock import Mock, MagicMock, patch, call
 import tkinter as tk
 from datetime import datetime
 
-from storage.db_manager import DatabaseManager
-from encrypt.crypto_manager import (
+from Storage.db_manager import DatabaseManager
+from Encrypt.crypto_manager import (
     derive_key,
     hash_master_key,
     encrypt_data,
@@ -20,7 +20,7 @@ from encrypt.crypto_manager import (
     generate_salt,
     verify_master_password,
 )
-from utils.password_generator import generate_password
+from Utils.password_generator import generate_password
 
 
 # ============================================================================
